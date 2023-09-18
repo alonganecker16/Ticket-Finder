@@ -1,5 +1,4 @@
-import requests, aiohttp, asyncio, webbrowser, creds
-from pprint import pprint
+import requests, creds
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError

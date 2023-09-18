@@ -1,6 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 from functions import *
-import functions, ArtistListWidget, TicketFinder
+import TicketFinder
 
 global ui
 
