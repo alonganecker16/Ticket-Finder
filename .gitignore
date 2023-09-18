@@ -11,6 +11,10 @@ creds.py
 
 *.ui
 
+# Old Files
+
+old*
+
 # C extensions
 *.so
 
