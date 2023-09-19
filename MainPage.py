@@ -11,6 +11,9 @@ class Ui_Form(object):
         self.add_artist_button = QtWidgets.QPushButton(Form)
         self.add_artist_button.setGeometry(QtCore.QRect(550, 50, 161, 51))
         self.add_artist_button.setObjectName("add_artist_button")
+        self.profile_button = QtWidgets.QPushButton(Form)
+        self.profile_button.setGeometry(QtCore.QRect(350, 50, 161, 51))
+        self.profile_button.setObjectName("profile_button")
         self.welcome_label = QtWidgets.QLabel(Form)
         self.welcome_label.setGeometry(QtCore.QRect(50, 20, 211, 51))
         self.welcome_label.setObjectName("welcome_label")
@@ -25,6 +28,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.add_artist_button.setText(_translate("Form", "Add an Artist"))
+        self.profile_button.setText(_translate("Form", "Update Profile"))
         self.welcome_label.setText(_translate("Form", "Hello, [USERNAME]"))
         __sortingEnabled = self.artist_listWidget.isSortingEnabled()
         self.artist_listWidget.setSortingEnabled(False)

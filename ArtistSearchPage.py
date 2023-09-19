@@ -48,7 +48,7 @@ class Ui_Form(object):
 
     def addToList(self, artist):
         artist_name = artist["artist"]
-        url = artist["image"]
+        url = artist["image_url"]
 
         print("Name: {}, Url: {}".format(artist_name, url))
 

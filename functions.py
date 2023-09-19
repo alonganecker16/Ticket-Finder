@@ -43,17 +43,24 @@ def login(widget):
     except Exception as e:
         print(e)
 
-def create_account(widget):
-    global username
-    username = widget.login_page.username_line.text()
+def refreshUser(username):
+    try:
+        response = mycol.find_one({ "username" : username })
+        if response == None:
+            return None
+        else:
+            return response
+    except Exception as e:
+        print(e)
+
+def create_account(user):
+    username = user["username"]
 
     try:
-        response = mycol.insert_one({ "username" : username })
+        response = mycol.insert_one({ "username" : username, "favorites" : user["favorites"], "pref" : user["pref"] })
         print("User {} was created successfully.".format(username))
         return response
     except DuplicateKeyError:
-        widget.login_page.error_label.setText("<html><head/><body><p><span style=\" font-size:14pt; color:#de0000;\">User {} already exists.</span></p></body></html>".format(username))
-        widget.login_page.error_label.setVisible(True)
         return None
     except Exception as e:
         print(e)
@@ -62,11 +69,10 @@ def get_user_pref(username):
     response = mycol.find_one({ "username" : username },{ "_id": 0, "pref": 1 })
     return response
 
-def update_user_settings():
-    u_state = input("Which state would you prefer to attend shows in?\nState: ")
+def update_user_settings(state):
 
     try:
-        mycol.update_one({ "username" : username }, { "$set" : { "pref.state" : u_state } })
+        mycol.update_one({ "username" : username }, { "$set" : { "pref.state" : state } })
         print("Settings updated.")
     except Exception as e:
         print("Something went wrong while deleting from favorites.")
@@ -107,7 +113,7 @@ def get_artists(artist):
         item = {
             "id_num": x["id"],
             "artist": x["name"],
-            "image": x["image"]
+            "image_url": x["image"]
         }
         artist_list.append(item)
     return artist_list
@@ -126,26 +132,18 @@ def set_favorite_artist(username, artistInfo):
     else:
         print("Artist already in favorites.")
 
-def remove_favorite_artist():
-    artistList = get_favorites()
-
-    if len(artistList) == 0 :
-        print("There are no artists in your favorites yet.")
-        return
+def remove_favorite_artist(username, artistInfo):
     
-    print(artistList)
-    
-    artistToDelete = input("Which artist (must match case) do you want to remove? Hit enter to cancel.\n")
+    artistToDelete = artistInfo["artist"]
 
-    if artistToDelete in artistList:
-        try:
-            mycol.update_one({ "username" : username }, { "$pull" : { "favorites" : { "artist" : artistToDelete } } })
-            print("{} was removed from your favorites list.".format(artistToDelete))
-        except Exception as e:
-            print("Something went wrong while deleting from favorites.")
-            print(e)
-    else:
-        print("No artist deleted. No artist selected or name was misspelled.")
+    try:
+        mycol.update_one({ "username" : username }, { "$pull" : { "favorites" : { "artist" : artistToDelete } } })
+        print("{} was removed from your favorites list.".format(artistToDelete))
+        return True
+    except Exception as e:
+        print("Something went wrong while deleting from favorites.")
+        print(e)
+        return False
 
 def get_events(username):
     artist_ids_list = get_favorites_ids(username)
